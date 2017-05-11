@@ -59,8 +59,9 @@ void parabens(jogo *j, char res){
 
 void atualizarTela(jogo *j){
 	int i;
+	printf("  0|1|2\n");
 	for(i = 0; i < 3; ++i)
-		printf("%c|%c|%c\n", j->tela[i][0], j->tela[i][1], j->tela[i][2]);
+		printf("%i %c|%c|%c\n", i, j->tela[i][0], j->tela[i][1], j->tela[i][2]);
 }
 
 char verifyWin(jogo *j){
@@ -97,18 +98,75 @@ bool verifyVazio(jogo *j, char l, char c){
 bool doMove(jogo *j, char jogador, char l, char c){
 	if(!verifyVazio(j, l, c)) return false;
 	j->tela[l][c] = jogador;
+	++j->jogadas;
 	return true;
 }
 
-int simulateSimulation(jogo *j, point *p, int depth){
-	if(depth >= 1000) return -INT_MIN;
+bool isOver(jogo j){
+	if(j.jogadas >= 9 || verifyWin(&j) != 0)
+		return true;
+	return false;
+}
 
-	jogo *cJogo = malloc(sizeof(jogo));
-	cJogo = memcpy(cJogo, j, sizeof(jogo));
-
-	simulateSimulation(cJogo, p, depth + 1);
+int score(jogo j, int depth){
+	char won = verifyWin(&j);
+	//printf("%c Ganhou: \n", won);
+	if(won == j.simboloComputador){
+		return 100 - depth;
+	}else if(won == j.simboloJogador)
+		return depth - 100;
 	
-	free(cJogo);
+	return 0;
+
+}
+int simulateSimulation(jogo j, point *pp, int depth, bool maximizingPlayer){
+	//printf("Entrou %i\n", depth);
+	if(depth >= 100000) return -1000;
+	//printf("(Acabou? : %s)\n", isOver(j) ? "SIM" : "NAO");
+	if(isOver(j)) return score(j, depth);
+	
+	int scores[500];
+	point moves[500];
+	size_t scoresLeng = 0, movesLeng = 0;
+	int x, y;
+	
+	for(y = 0; y < 3; ++y){
+		for(x = 0; x < 3; ++x){
+			if(!verifyVazio(&j, y, x)) continue;
+			point p;
+			p.x = x;
+			p.y = y;
+
+			moves[movesLeng++] = p;
+			jogo jj = j;
+			doMove(&jj, isComputer(&j) ? j.simboloComputador : j.simboloJogador, y, x);
+			jj.jogadorAtual = isComputer(&jj) ? 0 : 1;
+			
+			scores[scoresLeng++] = simulateSimulation(jj, pp, depth + 1, isComputer(&jj));
+			//printf("teste: %i\n", scores[scoresLeng - 1]);
+			//atualizarTela(&jj);
+			//printf("{%i, %i}\n", p.y, p.x);
+
+		}
+	}
+
+	if(maximizingPlayer){
+		int maxIndex = 0;
+		for(y = 0; y < scoresLeng; ++y){
+			if(scores[y] >= scores[maxIndex])
+				maxIndex = y;
+		}
+		*pp = moves[maxIndex];
+		return scores[maxIndex];
+	}else{
+		int minIndex = 0;
+		for(y = 0; y < scoresLeng; ++y){
+			if(scores[y] <= scores[minIndex])
+				minIndex = y;
+		}
+		*pp = moves[minIndex];
+		return scores[minIndex];
+	}
 }
 
 void simulateComputer(jogo *j){
@@ -122,8 +180,12 @@ void simulateComputer(jogo *j){
 		}while(!verifyVazio(j, l, c));
 		doMove(j, j->simboloComputador, l, c);
 	}else{
-		point *p = malloc(sizeof(point));
-		simulateSimulation(j, p, 0);
+		point p;
+		simulateSimulation(*j, &p, 0, true);
+		doMove(j, j->simboloComputador, p.y, p.x);
+		//printf("Melhor movimento: {%i, %i}\n", p.x, p.y);
+		//printf("%i\n", j->tela[0][0]);
+		//printf("===================\n========================\nO PC fez algo\n");
 	}
 	printf("Computador jogou:\n");
 }
@@ -159,6 +221,26 @@ void resetarJogo(jogo *j, int dificuldade){
 	j->dificuldade = dificuldade;
 }
 
+void velha(){
+	printf("\n\
+░░░░▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄\n\
+░░░░█░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄\n\
+░░░█░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█\n\
+░░█░░░░░░▄██▀▄▄░░░░░▄▄▄░░░█\n\
+░▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░█\n\
+█▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒█\n\
+█▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█\n\
+░█▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█\n\
+░░█░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█\n\
+░░░█░░██░░▀█▄▄▄█▄▄█▄████░█\n\
+░░░░█░░░▀▀▄░█░░░█░███████░█\n\
+░░░░░▀▄░░░▀▀▄▄▄█▄█▄█▄█▄▀░░█\n\
+░░░░░░░▀▄▄░▒▒▒▒░░░░░░░░░░█\n\
+░░░░░░░░░░▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░█\n\
+░░░░░░░░░░░░░░▀▄▄▄▄▄░░░░░█\n");
+	printf("Deu velha! HA! HA!\n");
+}
+
 int iniciarJogo(int dificuldade, int qntJogos){
 	jogo *newJogo = malloc(sizeof(jogo));
 	int jogosAtuais = 0;
@@ -170,6 +252,9 @@ int iniciarJogo(int dificuldade, int qntJogos){
 		char res = verifyWin(newJogo);
 		if(res != 0){
 			parabens(newJogo, res);
+			break;
+		}else if(isOver(*newJogo)){
+			velha();
 			break;
 		}
 		atualizarTela(newJogo);
