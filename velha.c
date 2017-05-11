@@ -4,22 +4,57 @@
 #include <string.h>
 #include <limits.h>
 
-#define TROLL_FACE 	printf("\n\
-		    ▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄\n\
-		    █░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄\n\
-		   █░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█\n\
-		  █░░░░░░▄██▀▄▄░░░░░▄▄▄░░░█\n\
-		 ▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░█\n\
-		█▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒█\n\
-		█▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█\n\
-		 █▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█\n\
-		  █░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█\n\
-		   █░░██░░▀█▄▄▄█▄▄█▄████░█\n\
-		    █░░░▀▀▄░█░░░█░███████░█\n\
-		     ▀▄░░░▀▀▄▄▄█▄█▄█▄█▄▀░░█\n\
-		       ▀▄▄░▒▒▒▒░░░░░░░░░░█\n\
-		          ▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░█\n\
-		              ▀▄▄▄▄▄░░░░░█\n");
+#define TROLL_FACE 	"\n\
+	    ▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄\n\
+	    █░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄\n\
+	   █░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█\n\
+	  █░░░░░░▄██▀▄▄░░░░░▄▄▄░░░█\n\
+	 ▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░█\n\
+	█▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒█\n\
+	█▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█\n\
+	 █▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█\n\
+	  █░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█\n\
+	   █░░██░░▀█▄▄▄█▄▄█▄████░█\n\
+	    █░░░▀▀▄░█░░░█░███████░█\n\
+	     ▀▄░░░▀▀▄▄▄█▄█▄█▄█▄▀░░█\n\
+	       ▀▄▄░▒▒▒▒░░░░░░░░░░█\n\
+	          ▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░█\n\
+	              ▀▄▄▄▄▄░░░░░█\n"
+
+#define THUMBS_UP "\n\
+	            ▄▄\n\
+	           █░░█\n\
+	           █░░█\n\
+	          █░░░█\n\
+	         █░░░░█\n\
+	███████▄▄█░░░░░██████▄\n\
+	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
+	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
+	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
+	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
+	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
+	▓▓▓▓▓▓█████░░░░░░░░░█\n\
+	██████▀    ▀▀██████▀\n"
+
+#define SAD_FACE "\n\
+	    ▄▄██▀▀▀▀▀▀▀█▄\n\
+	  ▄▀▀░░░░░░░░░░░░▀█▄\n\
+	 █▀░░░░░░░░░░░░░░░░█▄\n\
+	▄█░░░▄▄▄█▄▄░░▄░░░░░░█\n\
+	█░░░▀██▀▀▀░██▄█░░░░░▀█\n\
+	█░░░░░▄░░▀▄▄░░░░▄░░░░▀█\n\
+	█▀░████░░░░████░▀░░░░░█\n\
+	█░░▀███░░░░███▀░░░░░░░█▄\n\
+	█░░▄░▀▀░░░░▀▀░░▄░░░░░░██\n\
+	▀█░░█▀░▄▄░░█░▀▀░░░░░░░█▀\n\
+	 ▀█░░░░█▀▀▀▀▀▀▄░░░░░░░█\n\
+	  █░░░█░░▄▄▄▄░▄█░░░░░▄█\n\
+	  ▀█░░██▀▀██▀▀▀█▀░░░▄█\n\
+	   ▀█▄░░░░░░░░▄░░░░▄█\n\
+	     ▀▄▄▀██████░░▄█▀\n\
+	       ▀█▄▄▄▄▄▄▄█▀\n\
+	         ▄▄████▄\n"
+
 
 typedef struct{
 	char x, y;
@@ -37,41 +72,11 @@ typedef struct{
 void parabens(jogo *j, char res){
 	bool computerWon = (res != j->simboloJogador);
 	if(!computerWon)
-		printf("\n\
-	            ▄▄\n\
-	           █░░█\n\
-	           █░░█\n\
-	          █░░░█\n\
-	         █░░░░█\n\
-	███████▄▄█░░░░░██████▄\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█████░░░░░░░░░█\n\
-	██████▀    ▀▀██████▀\n");
+		printf(THUMBS_UP);
 	else{
-		printf("\n\
-	    ▄▄██▀▀▀▀▀▀▀█▄\n\
-	  ▄▀▀░░░░░░░░░░░░▀█▄\n\
-	 █▀░░░░░░░░░░░░░░░░█▄\n\
-	▄█░░░▄▄▄█▄▄░░▄░░░░░░█\n\
-	█░░░▀██▀▀▀░██▄█░░░░░▀█\n\
-	█░░░░░▄░░▀▄▄░░░░▄░░░░▀█\n\
-	█▀░████░░░░████░▀░░░░░█\n\
-	█░░▀███░░░░███▀░░░░░░░█▄\n\
-	█░░▄░▀▀░░░░▀▀░░▄░░░░░░██\n\
-	▀█░░█▀░▄▄░░█░▀▀░░░░░░░█▀\n\
-	 ▀█░░░░█▀▀▀▀▀▀▄░░░░░░░█\n\
-	  █░░░█░░▄▄▄▄░▄█░░░░░▄█\n\
-	  ▀█░░██▀▀██▀▀▀█▀░░░▄█\n\
-	   ▀█▄░░░░░░░░▄░░░░▄█\n\
-	     ▀▄▄▀██████░░▄█▀\n\
-	       ▀█▄▄▄▄▄▄▄█▀\n\
-	         ▄▄████▄\n");
+		printf(SAD_FACE);
 	}
-	printf("*********\nO %s venceu o jogo!\n", computerWon ? "Computador" : "Jogador");
+	printf("*********************************************\nO %s venceu o jogo!\n*********************************************\n", computerWon ? "Computador" : "Jogador");
 }
 
 void atualizarTela(jogo *j){
@@ -106,15 +111,18 @@ char verifyWin(jogo *j){
 	return false;
 }
 
-bool isComputer(jogo *j) { return j->jogadorAtual == 1; }
-
-bool verifyVazio(jogo *j, char l, char c){
-	return j->tela[l][c] == '-';
+bool isComputer(jogo j) {
+	return j.jogadorAtual == 1;
 }
 
-bool doMove(jogo *j, char jogador, char l, char c){
-	if(!verifyVazio(j, l, c)) return false;
-	j->tela[l][c] = jogador;
+bool isEmpty(jogo j, point p){
+	return j.tela[p.y][p.x] == '-';
+}
+
+bool doMove(jogo *j, char jogador, point p){
+	if(!isEmpty(*j, p)) return false;
+
+	j->tela[p.y][p.x] = jogador;
 	++j->jogadas;
 	return true;
 }
@@ -127,7 +135,7 @@ bool isOver(jogo j){
 
 int score(jogo j, int depth){
 	char won = verifyWin(&j);
-	//printf("%c Ganhou: \n", won);
+
 	if(won == j.simboloComputador){
 		return 100 - depth;
 	}else if(won == j.simboloJogador)
@@ -137,9 +145,8 @@ int score(jogo j, int depth){
 
 }
 int simulateSimulation(jogo j, point *pp, int depth, bool maximizingPlayer){
-	//printf("Entrou %i\n", depth);
 	if(depth >= 100000) return -1000;
-	//printf("(Acabou? : %s)\n", isOver(j) ? "SIM" : "NAO");
+	
 	if(isOver(j)) return score(j, depth);
 	
 	int scores[500];
@@ -149,21 +156,18 @@ int simulateSimulation(jogo j, point *pp, int depth, bool maximizingPlayer){
 	
 	for(y = 0; y < 3; ++y){
 		for(x = 0; x < 3; ++x){
-			if(!verifyVazio(&j, y, x)) continue;
 			point p;
 			p.x = x;
 			p.y = y;
 
+			if(!isEmpty(j, p)) continue;
+
 			moves[movesLeng++] = p;
 			jogo jj = j;
-			doMove(&jj, isComputer(&j) ? j.simboloComputador : j.simboloJogador, y, x);
-			jj.jogadorAtual = isComputer(&jj) ? 0 : 1;
+			doMove(&jj, isComputer(j) ? j.simboloComputador : j.simboloJogador, p);
+			jj.jogadorAtual = isComputer(jj) ? 0 : 1;
 			
-			scores[scoresLeng++] = simulateSimulation(jj, pp, depth + 1, isComputer(&jj));
-			//printf("teste: %i\n", scores[scoresLeng - 1]);
-			//atualizarTela(&jj);
-			//printf("{%i, %i}\n", p.y, p.x);
-
+			scores[scoresLeng++] = simulateSimulation(jj, pp, depth + 1, isComputer(jj));
 		}
 	}
 
@@ -187,23 +191,16 @@ int simulateSimulation(jogo j, point *pp, int depth, bool maximizingPlayer){
 }
 
 void simulateComputer(jogo *j){
+	point p;
 	if(j->dificuldade == 0){
-		//Movimento Aleatorio
-		int l, c;
-
 		do{
-			l = rand() % 3;
-			c = rand() % 3;
-		}while(!verifyVazio(j, l, c));
-		doMove(j, j->simboloComputador, l, c);
-	}else{
-		point p;
+			p.y = rand() % 3;
+			p.x = rand() % 3;
+		}while(!isEmpty(*j, p));
+	}else
 		simulateSimulation(*j, &p, 0, true);
-		doMove(j, j->simboloComputador, p.y, p.x);
-		//printf("Melhor movimento: {%i, %i}\n", p.x, p.y);
-		//printf("%i\n", j->tela[0][0]);
-		//printf("===================\n========================\nO PC fez algo\n");
-	}
+	
+	doMove(j, j->simboloComputador, p);
 	printf("Computador jogou:\n");
 }
 
@@ -211,11 +208,11 @@ void readPlayer(jogo *j){
 	int a;
 	printf("Sua ação (AB): \n");
 	scanf("%i", &a);
+	point p;
+	p.y = a / 10;
+	p.x = a % 10;
 
-	char linha = a / 10;
-	char coluna = a % 10;
-
-	if(linha > 2 || linha < 0 || coluna > 2 || coluna < 0 || !doMove(j, j->simboloJogador, linha, coluna)){
+	if(p.y > 2 || p.y < 0 || p.x > 2 || p.x < 0 || !doMove(j, j->simboloJogador, p)){
 		printf("Movimento invalido\n");
 		readPlayer(j);
 		return;
@@ -223,23 +220,23 @@ void readPlayer(jogo *j){
 }
 
 void resetarJogo(jogo *j, int dificuldade){
-	int i, x;
-	for(i = 0; i < 3; ++i){
-		for(x = 0; x < 3; ++x){
-			j->tela[i][x] = '-';
-		}
-	}
-	j->jogadas = 0;
-	j->jogadorAtual = 0;
+	int y, x;
+	for(y = 0; y < 3; ++y)
+		for(x = 0; x < 3; ++x)
+			j->tela[y][x] = '-';
 
-	j->simboloComputador = isComputer(j) ? 'X' : 'O';
-	j->simboloJogador = !isComputer(j) ? 'X' : 'O'; 
+	j->jogadas = 0;
+	j->jogadorAtual = rand() % 2;
+
+	bool isComp = isComputer(*j);
+	j->simboloComputador = isComp ? 'X' : 'O';
+	j->simboloJogador = !isComp ? 'X' : 'O'; 
 
 	j->dificuldade = dificuldade;
 }
 
 void velha(){
-	TROLL_FACE
+	printf(TROLL_FACE);
 	printf("Deu velha! HA! HA!\n");
 }
 
@@ -249,7 +246,7 @@ int iniciarJogo(int dificuldade, int qntJogos){
 
 	resetarJogo(newJogo, dificuldade);
 
-	printf("O primeiro jogador será %s\n", isComputer(newJogo) ? "Computador" : "Você");
+	printf("O primeiro jogador será %s\n", isComputer(*newJogo) ? "Computador" : "Você");
 	while(1){
 		char res = verifyWin(newJogo);
 		if(res != 0){
@@ -260,14 +257,15 @@ int iniciarJogo(int dificuldade, int qntJogos){
 			break;
 		}
 		atualizarTela(newJogo);
+		bool isComp = isComputer(*newJogo);
 
-		if(isComputer(newJogo)){
+		if(isComp){
 			simulateComputer(newJogo);
 		}else{
 			readPlayer(newJogo);
 		}
 
-		newJogo->jogadorAtual = isComputer(newJogo) ? 0 : 1;
+		newJogo->jogadorAtual = isComp ? 0 : 1;
 	}
 }
 
