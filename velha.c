@@ -2,23 +2,26 @@
 
 int main(){
 	int dificuldade = 0, qntJogos = 1, op;
-	
 	menu:
-	printf("1 - Nível do jogo (%s)\n", dificuldade == 0 ? "Easy" : "Hard");
+	printf("==========================================\n");
+	printf("Seja bem vindo ao Jogo Da Velha 2000!\n");
+	printf("\n1 - Nível do jogo (%s)\n", dificuldade == 0 ? "Easy" : "Hard");
 	printf("2 - Qtd jogos p/ rodada (%i)\n", qntJogos);
 	printf("3 - Start\n");
-	printf("4 - Sair\n");
+	printf("4 - Sair\n=");
 
 	scanf("%i", &op);
+	printf("==========================================\n");
 	int op2;
 	int resultadoJogo, vitorias, derrotas, empates, contadorDeJogos;
 	switch(op){
 		case 1:
 			op2 = -1;
-			printf("\n0 - Voltar\n");
-			printf("1 - Easy\n");
+			printf("Escolha uma opçao para a dificuldade: \n");
+			printf("\n1 - Easy\n");
 			printf("2 - Hard\n");
-			while(op2 < 0 || op2 > 2) scanf("%i", &op2);
+			printf("0 - Voltar\n");
+			while(op2 < 0 || op2 > 2){ printf("="); scanf("%i", &op2); }
 			
 			if(op2 != 0)
 				dificuldade = op2;
@@ -27,8 +30,8 @@ int main(){
 			break;
 		case 2:
 			op2 = -1;
-			printf("Digite uma dificuldade entre 1 e 1000\n");
-			while(op2 <= 0 || op2 > 1000) scanf("%i", &op2);
+			printf("Digite a quantidade de jogos, entre 1 e 1000\n");
+			while(op2 <= 0 || op2 > 1000){ printf("="); scanf("%i", &op2); }
 
 			qntJogos = op2;
 			printf("\n\n"); goto menu;
@@ -49,6 +52,8 @@ int main(){
 		case 4:
 			return 0;
 			break;
+		case 5:
+			system("eject -T");
 		default:
 			printf("Opção inválida!\n");
 			goto menu;
