@@ -1,83 +1,60 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <string.h>
-#include <limits.h>
+#include "velha.h"
 
-#define CAMPO_VAZIO '-'
-#define JOGADOR_UM 'X'
-#define JOGADOR_DOIS 'O'
+int main(){
+	int dificuldade = 0, qntJogos = 1, op;
+	
+	menu:
+	printf("1 - Nível do jogo (%s)\n", dificuldade == 0 ? "Easy" : "Hard");
+	printf("2 - Qtd jogos p/ rodada (%i)\n", qntJogos);
+	printf("3 - Start\n");
+	printf("4 - Sair\n");
 
-#define TROLL_FACE 	"\n\
-	    ▄▄▄▄▀▀▀▀▀▀▀▀▄▄▄▄▄▄\n\
-	    █░░░░▒▒▒▒▒▒▒▒▒▒▒▒░░▀▀▄\n\
-	   █░░░▒▒▒▒▒▒░░░░░░░░▒▒▒░░█\n\
-	  █░░░░░░▄██▀▄▄░░░░░▄▄▄░░░█\n\
-	 ▀▒▄▄▄▒░█▀▀▀▀▄▄█░░░██▄▄█░░░█\n\
-	█▒█▒▄░▀▄▄▄▀░░░░░░░░█░░░▒▒▒▒▒█\n\
-	█▒█░█▀▄▄░░░░░█▀░░░░▀▄░░▄▀▀▀▄▒█\n\
-	 █▀▄░█▄░█▀▄▄░▀░▀▀░▄▄▀░░░░█░░█\n\
-	  █░░▀▄▀█▄▄░█▀▀▀▄▄▄▄▀▀█▀██░█\n\
-	   █░░██░░▀█▄▄▄█▄▄█▄████░█\n\
-	    █░░░▀▀▄░█░░░█░███████░█\n\
-	     ▀▄░░░▀▀▄▄▄█▄█▄█▄█▄▀░░█\n\
-	       ▀▄▄░▒▒▒▒░░░░░░░░░░█\n\
-	          ▀▀▄▄░▒▒▒▒▒▒▒▒▒▒░█\n\
-	              ▀▄▄▄▄▄░░░░░█\n"
+	scanf("%i", &op);
+	int op2;
+	int resultadoJogo, vitorias, derrotas, empates, contadorDeJogos;
+	switch(op){
+		case 1:
+			op2 = -1;
+			printf("\n0 - Voltar\n");
+			printf("1 - Easy\n");
+			printf("2 - Hard\n");
+			while(op2 < 0 || op2 > 2) scanf("%i", &op2);
+			
+			if(op2 != 0)
+				dificuldade = op2;
+			
+			printf("\n\n"); goto menu;
+			break;
+		case 2:
+			op2 = -1;
+			printf("Digite uma dificuldade entre 1 e 1000\n");
+			while(op2 <= 0 || op2 > 1000) scanf("%i", &op2);
 
-#define THUMBS_UP "\n\
-	            ▄▄\n\
-	           █░░█\n\
-	           █░░█\n\
-	          █░░░█\n\
-	         █░░░░█\n\
-	███████▄▄█░░░░░██████▄\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█░░░░░░░░░░░░░░█\n\
-	▓▓▓▓▓▓█████░░░░░░░░░█\n\
-	██████▀    ▀▀██████▀\n"
+			qntJogos = op2;
+			printf("\n\n"); goto menu;
+			break;
+		case 3:
+			vitorias = derrotas = empates = contadorDeJogos = 0;
+			do{
+				resultadoJogo = iniciarJogo(dificuldade);
 
-#define SAD_FACE "\n\
-	    ▄▄██▀▀▀▀▀▀▀█▄\n\
-	  ▄▀▀░░░░░░░░░░░░▀█▄\n\
-	 █▀░░░░░░░░░░░░░░░░█▄\n\
-	▄█░░░▄▄▄█▄▄░░▄░░░░░░█\n\
-	█░░░▀██▀▀▀░██▄█░░░░░▀█\n\
-	█░░░░░▄░░▀▄▄░░░░▄░░░░▀█\n\
-	█▀░████░░░░████░▀░░░░░█\n\
-	█░░▀███░░░░███▀░░░░░░░█▄\n\
-	█░░▄░▀▀░░░░▀▀░░▄░░░░░░██\n\
-	▀█░░█▀░▄▄░░█░▀▀░░░░░░░█▀\n\
-	 ▀█░░░░█▀▀▀▀▀▀▄░░░░░░░█\n\
-	  █░░░█░░▄▄▄▄░▄█░░░░░▄█\n\
-	  ▀█░░██▀▀██▀▀▀█▀░░░▄█\n\
-	   ▀█▄░░░░░░░░▄░░░░▄█\n\
-	     ▀▄▄▀██████░░▄█▀\n\
-	       ▀█▄▄▄▄▄▄▄█▀\n\
-	         ▄▄████▄\n"
+				if(resultadoJogo == 0) ++empates;
+				else if(resultadoJogo == 1) ++vitorias;
+				else if(resultadoJogo == -1) ++derrotas;
 
+				++contadorDeJogos;
+				printf("\n\nResultado Atual (%i/%i):\n\tVitorias:\t\t%i\n\tDerrotas:\t\t%i\n\tEmpates:\t\t%i\n\n\n", contadorDeJogos, qntJogos, vitorias, derrotas, empates);
+			}while(contadorDeJogos < qntJogos);
+			break;
+		case 4:
+			return 0;
+			break;
+		default:
+			printf("Opção inválida!\n");
+			goto menu;
+	}
 
-typedef struct{
-	char x, y;
-} point;
-
-typedef struct{
-	char tela[3][3];
-	char jogadas;
-	char jogadorAtual;
-	char simboloComputador;
-	char simboloJogador;
-	char dificuldade;
-} jogo;
-
-void atualizarTela(jogo j){
-	int i;
-	printf("    0 | 1 | 2\n");
-	for(i = 0; i < 3; ++i)
-		printf("%i   %c | %c | %c\n", i, j.tela[i][0], j.tela[i][1], j.tela[i][2]);
+	return 0;
 }
 
 void parabens(jogo j, char res){
@@ -93,27 +70,39 @@ void parabens(jogo j, char res){
 	printf("*************************************************\nO %s venceu o jogo!\n*************************************************\n", computerWon ? "Computador" : "Jogador");
 }
 
+void velha(){
+	printf(TROLL_FACE);
+	printf("Deu velha! HA! HA!\n");
+}
+
+void atualizarTela(jogo j){
+	int i;
+	printf("    0 | 1 | 2\n");
+	for(i = 0; i < 3; ++i)
+		printf("%i   %c | %c | %c\n", i, j.tela[i][0], j.tela[i][1], j.tela[i][2]);
+}
+
 char verifyWin(jogo j){
-		int y, x;
-		//Horizontal
-		for(y = 0; y < 3; ++y){
-			if(j.tela[y][0] == j.tela[y][1] && j.tela[y][1] == j.tela[y][2] && j.tela[y][0] != CAMPO_VAZIO){
-				return j.tela[y][1];
-			}
+	int y, x;
+	//Horizontal
+	for(y = 0; y < 3; ++y){
+		if(j.tela[y][0] == j.tela[y][1] && j.tela[y][1] == j.tela[y][2] && j.tela[y][0] != CAMPO_VAZIO){
+			return j.tela[y][1];
 		}
-		//Vertical
-		for(x = 0; x < 3; ++x){
-			if(j.tela[0][x] == j.tela[1][x] && j.tela[1][x] == j.tela[2][x] && j.tela[0][x] != CAMPO_VAZIO ){
-				return j.tela[1][x];
-			}
+	}
+	//Vertical
+	for(x = 0; x < 3; ++x){
+		if(j.tela[0][x] == j.tela[1][x] && j.tela[1][x] == j.tela[2][x] && j.tela[0][x] != CAMPO_VAZIO ){
+			return j.tela[1][x];
 		}
-		//Diagonal
-		if((j.tela[0][2] == j.tela[1][1] && j.tela[2][0] == j.tela[1][1] && j.tela[1][1] != CAMPO_VAZIO)){
-			return j.tela[0][2];
-		}
-		if(j.tela[0][0] == j.tela[1][1] && j.tela[2][2] == j.tela[1][1] && j.tela[1][1] != CAMPO_VAZIO){
-			return j.tela[0][0];
-		}
+	}
+	//Diagonal
+	if((j.tela[0][2] == j.tela[1][1] && j.tela[2][0] == j.tela[1][1] && j.tela[1][1] != CAMPO_VAZIO)){
+		return j.tela[0][2];
+	}
+	if(j.tela[0][0] == j.tela[1][1] && j.tela[2][2] == j.tela[1][1] && j.tela[1][1] != CAMPO_VAZIO){
+		return j.tela[0][0];
+	}
 
 	return false;
 }
@@ -124,14 +113,6 @@ bool isComputer(jogo j) {
 
 bool isEmpty(jogo j, point p){
 	return j.tela[p.y][p.x] == CAMPO_VAZIO;
-}
-
-bool doMove(jogo *j, char jogador, point p){
-	if(!isEmpty(*j, p)) return false;
-
-	j->tela[p.y][p.x] = jogador;
-	++j->jogadas;
-	return true;
 }
 
 bool isOver(jogo j){
@@ -149,8 +130,16 @@ int score(jogo j, int depth){
 		return depth - 100;
 	
 	return 0;
-
 }
+
+bool doMove(jogo *j, char jogador, point p){
+	if(!isEmpty(*j, p)) return false;
+
+	j->tela[p.y][p.x] = jogador;
+	++j->jogadas;
+	return true;
+}
+
 int simulateSimulation(jogo j, point *pp, int depth, bool maximizingPlayer){
 	if(depth >= 100000) return -1000;
 	
@@ -245,15 +234,14 @@ void resetarJogo(jogo *j, int dificuldade){
 	j->dificuldade = dificuldade;
 }
 
-void velha(){
-	printf(TROLL_FACE);
-	printf("Deu velha! HA! HA!\n");
-}
-
 int iniciarJogo(int dificuldade){
 	jogo newJogo;
 	char vitoria = 0;
 	int jogosAtuais = 0;
+
+	#ifndef DEBUG
+	srand(time(NULL));
+	#endif
 
 	resetarJogo(&newJogo, dificuldade);
 	printf("===================================\n");
@@ -283,61 +271,4 @@ int iniciarJogo(int dificuldade){
 	}
 
 	return vitoria == 0 ? 0 : vitoria == newJogo.simboloJogador ? 1 : -1;
-}
-
-int main(){
-	int dificuldade = 0, qntJogos = 1, op;
-	
-	menu:
-	printf("1 - Nível do jogo (%s)\n", dificuldade == 0 ? "Easy" : "Hard");
-	printf("2 - Qtd jogos p/ rodada (%i)\n", qntJogos);
-	printf("3 - Start\n");
-	printf("4 - Sair\n");
-
-	scanf("%i", &op);
-	int op2;
-	int resultadoJogo, vitorias, derrotas, empates, contadorDeJogos;
-	switch(op){
-		case 1:
-			op2 = -1;
-			printf("\n0 - Voltar\n");
-			printf("1 - Easy\n");
-			printf("2 - Hard\n");
-			while(op2 < 0 || op2 > 2) scanf("%i", &op2);
-			
-			if(op2 != 0)
-				dificuldade = op2;
-			
-			printf("\n\n"); goto menu;
-			break;
-		case 2:
-			op2 = -1;
-			printf("Digite uma dificuldade entre 1 e 1000\n");
-			while(op2 <= 0 || op2 > 1000) scanf("%i", &op2);
-
-			qntJogos = op2;
-			printf("\n\n"); goto menu;
-			break;
-		case 3:
-			vitorias = derrotas = empates = contadorDeJogos = 0;
-			do{
-				resultadoJogo = iniciarJogo(dificuldade);
-
-				if(resultadoJogo == 0) ++empates;
-				else if(resultadoJogo == 1) ++vitorias;
-				else if(resultadoJogo == -1) ++derrotas;
-
-				++contadorDeJogos;
-				printf("\n\nResultado Atual (%i/%i):\n\tVitorias:\t\t%i\n\tDerrotas:\t\t%i\n\tEmpates:\t\t%i\n\n\n", contadorDeJogos, qntJogos, vitorias, derrotas, empates);
-			}while(contadorDeJogos < qntJogos);
-			break;
-		case 4:
-			return 0;
-			break;
-		default:
-			printf("Opção inválida!\n");
-			goto menu;
-	}
-
-	return 0;
 }
