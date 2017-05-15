@@ -74,7 +74,10 @@ void parabens(jogo j, char res){
 		}
 	}
 	else{
-		printf(SAD_FACE);
+		switch(rand()%2){
+			case 0: printf(OH_GOD_WHY); break;
+			case 1: printf(SAD_FACE); break;
+		}
 	}
 	printf("*************************************************\nO %s venceu o jogo!\n*************************************************\n", computerWon ? "Computador" : "Jogador");
 }
