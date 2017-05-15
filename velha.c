@@ -4,7 +4,7 @@ int main(){
 	int dificuldade = 0, qntJogos = 1, op;
 	menu:
 	printf("==========================================\n");
-	printf("Seja bem vindo ao Jogo Da Velha 2000 TurboMax!\n");
+	printf("Seja bem vindo ao Jogo Da Velha 2000!\n");
 	printf("\n1 - Nível do jogo (%s)\n", dificuldade == 0 ? "Easy" : "Hard");
 	printf("2 - Qtd jogos p/ rodada (%i)\n", qntJogos);
 	printf("3 - Start\n");
@@ -30,12 +30,8 @@ int main(){
 			break;
 		case 2:
 			op2 = -1;
-			printf("Digite a quantidade de jogos, entre 1 e 9000\n");
-			while(op2 <= 0 || op2 > 1000){
-				if (op2 > 9000) 
-					printf("IT'S OVER NINE THOUSAND!!!\n");
-			 	printf("="); scanf("%i", &op2);
-			}
+			printf("Digite a quantidade de jogos, entre 1 e 1000\n");
+			while(op2 <= 0 || op2 > 1000){ printf("="); scanf("%i", &op2); }
 
 			qntJogos = op2;
 			printf("\n\n"); goto menu;
@@ -78,7 +74,10 @@ void parabens(jogo j, char res){
 		}
 	}
 	else{
-		printf(SAD_FACE);
+		switch(rand()%2){
+			case 0: printf(OH_GOD_WHY); break;
+			case 1: printf(SAD_FACE); break;
+		}
 	}
 	printf("*************************************************\nO %s venceu o jogo!\n*************************************************\n", computerWon ? "Computador" : "Jogador");
 }
