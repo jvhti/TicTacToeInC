@@ -68,8 +68,12 @@ void parabens(jogo j, char res){
 	atualizarTela(j);
 	printf("===================================================\n");
 	srand(time(NULL));	
-	if(!computerWon)
-		rand()%2==0 ? printf(THUMBS_UP_2) : printf(THUMBS_UP);
+	if(!computerWon){
+		switch(rand()%2){
+			case 0: printf(THUMBS_UP); break;
+			case 1: printf(THUMBS_UP_2); break;
+		}
+	}
 	else{
 		printf(SAD_FACE);
 	}
