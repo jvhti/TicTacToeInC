@@ -154,8 +154,8 @@ int simulateSimulation(jogo j, point *pp, int depth, bool maximizingPlayer){
 	
 	if(isOver(j)) return score(j, depth);
 	
-	int scores[500];
-	point moves[500];
+	int scores[9];
+	point moves[9];
 	size_t scoresLeng = 0, movesLeng = 0;
 	int x, y;
 	
