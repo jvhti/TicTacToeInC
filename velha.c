@@ -66,9 +66,10 @@ void parabens(jogo j, char res){
 	bool computerWon = (res != j.simboloJogador);
 	printf("\n================= VITORIA DE %c ===================\n", res);	
 	atualizarTela(j);
-	printf("===================================================\n");	
+	printf("===================================================\n");
+	srand(time(NULL));	
 	if(!computerWon)
-		printf(THUMBS_UP);
+		rand()%2==0 ? printf(THUMBS_UP_2) : printf(THUMBS_UP);
 	else{
 		printf(SAD_FACE);
 	}
